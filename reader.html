@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leggi – Poche Pretese</title>
+    <meta name="description" content="Leggi la fanzine Poche Pretese in modalità flipbook." />
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- StPageFlip -->
+    <script src="https://unpkg.com/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+</head>
+
+<body class="reader-page">
+
+    <!-- LOADING OVERLAY -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">CARICAMENTO</p>
+        <p class="loading-sub">Preparazione flipbook in corso…</p>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a class="navbar__logo" href="index.html">
+            <span class="navbar__logo-text">Poche Pretese</span>
+            <span class="navbar__logo-badge">FANZINE</span>
+        </a>
+        <div class="navbar__nav">
+            <a class="navbar__link" href="index.html">← Archivio</a>
+        </div>
+    </nav>
+
+    <!-- READER HEADER -->
+    <div class="reader-header">
+        <div class="reader-header__number" id="readerNumero">#1</div>
+        <h1 class="reader-header__title" id="readerTitolo">Poche Pretese</h1>
+        <p class="reader-header__subtitle" id="readerSottotitolo"></p>
+    </div>
+
+    <!-- FLIPBOOK STAGE -->
+    <div class="flipbook-stage">
+
+        <!-- FLIPBOOK CONTAINER -->
+        <div class="flipbook-container">
+            <!-- Prev button (hidden on mobile, shown beside book on desktop) -->
+            <button class="reader-nav-btn" id="btnPrev" title="Pagina precedente">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                </svg>
+            </button>
+
+            <!-- The flipbook -->
+            <div id="flipbook"></div>
+
+            <!-- Next button -->
+            <button class="reader-nav-btn" id="btnNext" title="Pagina successiva">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- PAGE COUNTER -->
+        <div class="page-counter" id="pageCounter">1 / 1</div>
+
+        <!-- READER ACTIONS -->
+        <div class="reader-actions">
+            <a class="btn btn--primary" id="btnDownload" href="#" download>
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                </svg>
+                Scarica PDF
+            </a>
+            <a class="btn btn--secondary" href="index.html">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                </svg>
+                Archivio
+            </a>
+        </div>
+
+    </div>
+
+    <!-- NO PDF MESSAGE (hidden by default) -->
+    <div class="no-pdf-msg" id="noPdfMsg" style="display:none;">
+        <div class="no-pdf-msg__icon">📄</div>
+        <h2 class="no-pdf-msg__title">PDF non trovato</h2>
+        <p class="no-pdf-msg__text">
+            Per visualizzare questo numero nel flipbook, carica il PDF nella cartella <code>/pdfs/</code> con il nome
+            corretto.
+        </p>
+        <div class="no-pdf-msg__code" id="expectedPath"></div>
+        <a class="btn btn--primary" style="margin-top:1rem;" href="index.html">← Torna all'archivio</a>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="js/data.js"></script>
+    <script src="js/reader.js"></script>
+</body>
+
+</html>
