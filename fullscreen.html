@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Poche Pretese - Schermo Intero</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- StPageFlip -->
+    <script src="https://unpkg.com/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--ink);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .fs-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .fs-header>* {
+            pointer-events: auto;
+        }
+
+        .fs-btn-back {
+            color: var(--bg);
+            text-decoration: none;
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 2px solid transparent;
+            padding: 0.5rem 1rem;
+            transition: var(--transition);
+        }
+
+        .fs-btn-back:hover {
+            border-color: var(--bg);
+        }
+
+        .fs-counter {
+            color: var(--bg);
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            letter-spacing: 2px;
+        }
+
+        .fs-stage {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .fs-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: 2px solid var(--bg);
+            color: var(--bg);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.2s;
+        }
+
+        .fs-nav:hover {
+            background: var(--bg);
+            color: var(--ink);
+        }
+
+        .fs-nav:disabled {
+            opacity: 0.3;
+            pointer-events: none;
+            border-color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .fs-nav-prev {
+            left: 40px;
+        }
+
+        .fs-nav-next {
+            right: 40px;
+        }
+
+        #flipbook {
+            box-shadow: 0 0 0 4px var(--bg);
+            border: 2px solid var(--bg);
+        }
+
+        #loadingOverlay {
+            z-index: 200;
+        }
+
+        @media(max-width: 600px) {
+            .fs-nav {
+                display: none;
+            }
+
+            .fs-header {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- LOADING OVERLAY -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">CARICAMENTO</p>
+    </div>
+
+    <!-- HEADER -->
+    <div class="fs-header">
+        <a href="reader.html" id="backLink" class="fs-btn-back">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+            </svg>
+            Chiudi
+        </a>
+        <div class="fs-counter" id="pageCounter">1 / 1</div>
+    </div>
+
+    <!-- FLIPBOOK STAGE -->
+    <div class="fs-stage">
+        <button class="fs-nav fs-nav-prev" id="btnPrev" title="Pagina precedente">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+            </svg>
+        </button>
+
+        <div id="flipbook"></div>
+
+        <button class="fs-nav fs-nav-next" id="btnNext" title="Pagina successiva">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="js/data.js"></script>
+    <script src="js/fullscreen.js"></script>
+</body>
+
+</html>

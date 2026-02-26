@@ -56,6 +56,10 @@ function getFlipbookSize() {
         // Usa più spazio disponibile, togliendo margine per ui e tasti base
         vw -= 160;
         vh -= 150;
+    } else {
+        // Rendi il flipbook più contenuto quando non è a schermo intero
+        vw -= 100;
+        vh -= 260; // Togliamo più altezza per ridurre l'ingombro generale
     }
 
     // Portrait A4-ish ratio: 1:1.414
@@ -198,56 +202,9 @@ async function buildFlipbook() {
     btnDownload.href = issue.pdf;
     btnDownload.download = `poce_pretese_${String(issue.id).padStart(2, '0')}.pdf`;
 
-    // Fullscreen toggle
-    if (btnFullscreen && flipbookStage) {
-        btnFullscreen.addEventListener('click', () => {
-            if (!document.fullscreenElement) {
-                flipbookStage.requestFullscreen().catch((err) => {
-                    console.error(`Error attempting to enable fullscreen: ${err.message}`);
-                });
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
-            }
-        });
-
-        // Update button text/icon based on fullscreen state
-        document.addEventListener('fullscreenchange', () => {
-            const container = document.querySelector('.flipbook-container');
-
-            if (document.fullscreenElement) {
-                flipbookStage.classList.add('is-fullscreen');
-                container.style.transform = ''; // Pulisci transform vecchi per sicurezza
-
-                btnFullscreen.innerHTML = `
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" />
-                    </svg>
-                    Esci
-                `;
-            } else {
-                flipbookStage.classList.remove('is-fullscreen');
-                container.style.transform = '';
-
-                btnFullscreen.innerHTML = `
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
-                    </svg>
-                    Schermo intero
-                `;
-            }
-
-            // Update pageFlip size dynamically
-            setTimeout(() => {
-                if (pageFlip) {
-                    const { width: fbW, height: fbH } = getFlipbookSize();
-                    flipbookEl.style.width = fbW + 'px';
-                    flipbookEl.style.height = fbH + 'px';
-                    pageFlip.update();
-                }
-            }, 50); // Small delay to let CSS classes apply
-        });
+    // Fullscreen link update
+    if (btnFullscreen) {
+        btnFullscreen.href = `fullscreen.html?issue=${issueId}`;
     }
 
     updateCounter();

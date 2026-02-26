@@ -471,6 +471,7 @@ footer {
   display: flex;
   gap: 1rem;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .reader-page .btn {
@@ -526,6 +527,13 @@ footer {
   border-color: rgba(255, 255, 255, 0.3);
   color: rgba(255, 255, 255, 0.3);
   background: transparent;
+}
+
+@media(max-width: 600px) {
+  /* Altrimenti su mobile rubano spazio al PDF stringendolo troppo */
+  .flipbook-stage:not(.is-fullscreen) .reader-nav-btn {
+    display: none;
+  }
 }
 
 .page-counter {
@@ -638,7 +646,7 @@ footer {
 
 .flipbook-stage.is-fullscreen .page-counter {
   position: absolute;
-  bottom: 80px;
+  bottom: 85px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
@@ -646,12 +654,16 @@ footer {
 
 .flipbook-stage.is-fullscreen .reader-actions {
   position: absolute;
-  bottom: 20px;
+  bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 90%;
+  max-width: 600px;
 }
 
 /* Freccette di navigazione a schermo intero */
