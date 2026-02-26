@@ -606,6 +606,71 @@ footer {
   color: var(--bg);
 }
 
+/* ── FULLSCREEN OVERRIDES ── */
+.flipbook-stage:-webkit-full-screen {
+  background: var(--ink);
+  padding: 0;
+}
+
+.flipbook-stage:fullscreen {
+  background: var(--ink);
+  padding: 0;
+}
+
+.flipbook-stage.is-fullscreen {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  /* Rimuove il padding normale */
+}
+
+/* Il contenitore centrale viene posizionato assolutamente per facilitare il transform: scale() */
+.flipbook-stage.is-fullscreen .flipbook-container {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Il JS concatenerà scale() a questo */
+  margin: 0;
+}
+
+.flipbook-stage.is-fullscreen .page-counter {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.flipbook-stage.is-fullscreen .reader-actions {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  gap: 1rem;
+}
+
+/* Freccette di navigazione a schermo intero */
+.flipbook-stage.is-fullscreen .reader-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  margin: 0;
+}
+
+.flipbook-stage.is-fullscreen #btnPrev {
+  left: 20px;
+}
+
+.flipbook-stage.is-fullscreen #btnNext {
+  right: 20px;
+}
+
 /* RESPONSIVE */
 @media(max-width: 768px) {
   .hero {

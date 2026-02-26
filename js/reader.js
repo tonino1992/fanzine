@@ -21,6 +21,8 @@ const expectedPath = document.getElementById('expectedPath');
 const readerNumero = document.getElementById('readerNumero');
 const readerTitolo = document.getElementById('readerTitolo');
 const readerSottotitolo = document.getElementById('readerSottotitolo');
+const btnFullscreen = document.getElementById('btnFullscreen'); // Fullscreen button
+const flipbookStage = document.querySelector('.flipbook-stage'); // Fullscreen target container
 
 /* ─── PARSE URL PARAMS ─── */
 const params = new URLSearchParams(window.location.search);
@@ -46,16 +48,27 @@ let currentPage = 0;
 
 /* ─── FLIPBOOK SIZE ─── */
 function getFlipbookSize() {
-    const vw = window.innerWidth;
+    const isFullScreen = document.fullscreenElement !== null;
+    let vw = window.innerWidth;
+    let vh = window.innerHeight;
+
+    if (isFullScreen) {
+        // Usa più spazio disponibile, togliendo margine per ui e tasti base
+        vw -= 160;
+        vh -= 150;
+    }
+
     // Portrait A4-ish ratio: 1:1.414
     // Show 2 pages side by side on desktop, 1 page on mobile
     if (vw <= 600) {
-        const w = Math.min(vw - 32, 380);
-        return { width: w, height: Math.round(w * 1.414), isSingle: true };
+        const w = Math.min(vw - 32, 380, vh / 1.414);
+        return { width: Math.round(w), height: Math.round(w * 1.414), isSingle: true };
     }
-    const pageW = Math.min(Math.floor((vw - 280) / 2), 380);
+
+    // desktop
+    const pageW = Math.min(Math.floor((vw - 40) / 2), vh / 1.414);
     const pageH = Math.round(pageW * 1.414);
-    return { width: pageW * 2, height: pageH, isSingle: false };
+    return { width: Math.round(pageW * 2), height: Math.round(pageH), isSingle: false };
 }
 
 /* ─── UPDATE COUNTER ─── */
@@ -131,6 +144,7 @@ async function buildFlipbook() {
         flipbookEl.style.display = 'none';
         document.querySelector('.flipbook-container').style.display = 'none';
         pageCounter.style.display = 'none';
+        if (btnFullscreen) btnFullscreen.style.display = 'none'; // Nasondi tasto fullscreen
         document.querySelector('.reader-actions').style.marginTop = '0';
         noPdfMsg.style.display = 'flex';
         expectedPath.textContent = issue.pdf;
@@ -159,7 +173,7 @@ async function buildFlipbook() {
         startZIndex: 0,
         autoSize: false,
         maxShadowOpacity: 0.4,
-        showCover: false,
+        showCover: true,
         mobileScrollSupport: true,
         swipeDistance: 30,
         clickEventForward: true,
@@ -183,6 +197,58 @@ async function buildFlipbook() {
     // Download link
     btnDownload.href = issue.pdf;
     btnDownload.download = `poce_pretese_${String(issue.id).padStart(2, '0')}.pdf`;
+
+    // Fullscreen toggle
+    if (btnFullscreen && flipbookStage) {
+        btnFullscreen.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                flipbookStage.requestFullscreen().catch((err) => {
+                    console.error(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        });
+
+        // Update button text/icon based on fullscreen state
+        document.addEventListener('fullscreenchange', () => {
+            const container = document.querySelector('.flipbook-container');
+
+            if (document.fullscreenElement) {
+                flipbookStage.classList.add('is-fullscreen');
+                container.style.transform = ''; // Pulisci transform vecchi per sicurezza
+
+                btnFullscreen.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" />
+                    </svg>
+                    Esci
+                `;
+            } else {
+                flipbookStage.classList.remove('is-fullscreen');
+                container.style.transform = '';
+
+                btnFullscreen.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+                    </svg>
+                    Schermo intero
+                `;
+            }
+
+            // Update pageFlip size dynamically
+            setTimeout(() => {
+                if (pageFlip) {
+                    const { width: fbW, height: fbH } = getFlipbookSize();
+                    flipbookEl.style.width = fbW + 'px';
+                    flipbookEl.style.height = fbH + 'px';
+                    pageFlip.update();
+                }
+            }, 50); // Small delay to let CSS classes apply
+        });
+    }
 
     updateCounter();
 

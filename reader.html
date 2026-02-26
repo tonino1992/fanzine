@@ -43,31 +43,37 @@
     <!-- FLIPBOOK STAGE -->
     <div class="flipbook-stage">
 
-        <!-- FLIPBOOK CONTAINER -->
+        <!-- Prev button (hidden on mobile, shown beside book on desktop) -->
+        <button class="reader-nav-btn" id="btnPrev" title="Pagina precedente">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+            </svg>
+        </button>
+
+        <!-- The flipbook -->
         <div class="flipbook-container">
-            <!-- Prev button (hidden on mobile, shown beside book on desktop) -->
-            <button class="reader-nav-btn" id="btnPrev" title="Pagina precedente">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-                </svg>
-            </button>
-
-            <!-- The flipbook -->
             <div id="flipbook"></div>
-
-            <!-- Next button -->
-            <button class="reader-nav-btn" id="btnNext" title="Pagina successiva">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-                </svg>
-            </button>
         </div>
+
+        <!-- Next button -->
+        <button class="reader-nav-btn" id="btnNext" title="Pagina successiva">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+            </svg>
+        </button>
 
         <!-- PAGE COUNTER -->
         <div class="page-counter" id="pageCounter">1 / 1</div>
 
         <!-- READER ACTIONS -->
         <div class="reader-actions">
+            <!-- Fullscreen button -->
+            <button class="btn btn--secondary" id="btnFullscreen" title="Schermo intero">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+                </svg>
+                Schermo intero
+            </button>
             <a class="btn btn--primary" id="btnDownload" href="#" download>
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
